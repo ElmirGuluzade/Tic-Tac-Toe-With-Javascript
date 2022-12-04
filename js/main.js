@@ -37,9 +37,9 @@ const fillBoard = (e) => {
             if (!clickedPart.matches('.x') && !clickedPart.matches('.o')) {
                 if (player) {
                     clickedPart.classList.add('x')
-                    player = !player
                     let h = Math.floor(i / 3);
                     let v = i % 3;
+                    player = !player
                     if (currentGame[h][v] != 1) currentGame[h][v] = 1;
                 } else if (player == false) {
                     clickedPart.classList.add('o')
@@ -86,13 +86,13 @@ const checkDraw = () => {
 document.addEventListener('click', () => {
     playAgainBtn.forEach(btn => {
         btn.addEventListener('click', () => {
-            winWindow.classList.remove('active');
-            drawWindow.classList.remove('active')
             currentGame = [
                 [0, 0, 0],
                 [0, 0, 0],
                 [0, 0, 0]
             ]
+            winWindow.classList.remove('active');
+            drawWindow.classList.remove('active')
             sumArr = [];
             isWin = false;
             player = true;
