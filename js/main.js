@@ -4,12 +4,14 @@ const winWindow = document.querySelector('.win')
 const drawWindow = document.querySelector('.draw')
 const winnerPlayer = document.querySelector('.winnerPlayer')
 const playAgainBtn = document.querySelectorAll('.playAgainBtn')
+const audio = document.querySelector('#audio')
+const mySound = new Audio("./audio/win.wav")
 
 let player = true; // true substitude 'x'
-let sum = 0, sumArr = [], isWin = false, isDraw = false;
+let sum = 0, isWin = false, isDraw = false;
 let firstPlayer = prompt("Which player starts? (write x or o)")
-if(firstPlayer == 'x') player = true;
-if(firstPlayer == 'o') player = false;
+if (firstPlayer == 'x') player = true;
+if (firstPlayer == 'o') player = false;
 
 const validWinning = [
     [0, 1, 2], // 0,0 0,1 0,2
@@ -35,19 +37,16 @@ const fillBoard = (e) => {
         if (parts[i] == e.target) {
             let clickedPart = e.target;
             if (!clickedPart.matches('.x') && !clickedPart.matches('.o')) {
+                let h = Math.floor(i / 3);
+                let v = i % 3;
                 if (player) {
                     clickedPart.classList.add('x')
-                    let h = Math.floor(i / 3);
-                    let v = i % 3;
-                    player = !player
                     if (currentGame[h][v] != 1) currentGame[h][v] = 1;
                 } else if (player == false) {
                     clickedPart.classList.add('o')
-                    player = !player
-                    let h = Math.floor(i / 3);
-                    let v = i % 3;
                     if (currentGame[h][v] != 1) currentGame[h][v] = -1;
                 }
+                player = !player
             }
         }
     }
@@ -60,13 +59,11 @@ const checkWinning = () => {
             let ver = el % 3;
             sum += currentGame[hor][ver];
         })
-        sumArr.push(sum)
         if (sum == 3 || sum == -3) {
             return isWin = true;
         }
         sum = 0;
     })
-    sumArr = []
     return isWin;
 }
 
@@ -80,7 +77,7 @@ const checkDraw = () => {
             return isDraw = false;
         }
     }
-    if(!winState) return isDraw = true;
+    if (!winState) return isDraw = true;
 }
 
 document.addEventListener('click', () => {
@@ -92,10 +89,9 @@ document.addEventListener('click', () => {
                 [0, 0, 0]
             ]
             winWindow.classList.remove('active');
-            drawWindow.classList.remove('active')
-            sumArr = [];
+            drawWindow.classList.remove('active');
             isWin = false;
-            player = true;
+            firstPlayer == "o" ? player = false : player = true
             parts.forEach((part) => {
                 part.classList.remove('x');
                 part.classList.remove('o');
@@ -110,6 +106,7 @@ const winPlayer = () => {
         let playerSign;
         player ? playerSign = 'O' : playerSign = 'X';
         winWindow.classList.add('active');
+        mySound.play()
         winnerPlayer.innerHTML = `${playerSign}'s Win`;
         player = null;
     }
